@@ -802,6 +802,7 @@ async function sendMessage() {
   isLoading = true;
 
   try {
+    apiKey = localStorage.getItem('pulse_api_key') || apiKey;
     if (!apiKey) {
       removeTyping(typingId);
       addMessage('pulse', '⚠️ I need an API key to respond. Tap the grid icon (⊞) in the top right → enter your Anthropic API key → Save. You can get a key at console.anthropic.com');
@@ -811,7 +812,10 @@ async function sendMessage() {
 
     var response = await fetch('/api/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': localStorage.getItem('pulse_api_key') || apiKey
+      },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
         max_tokens: 1024,
@@ -832,7 +836,7 @@ async function sendMessage() {
     }
   } catch (err) {
     removeTyping(typingId);
-    addMessage('pulse', '⚠️ Connection error. Check your internet connection and try again.');
+    addMessage('pulse', '⚠️ ' + (err.message.includes('401') ? 'Invalid API key — tap ⊞ and re-enter your key' : 'Connection error: ' + err.message));
   }
 
   isLoading = false;
