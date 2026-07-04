@@ -8,8 +8,6 @@
 <meta name="apple-mobile-web-app-title" content="PULSE">
 <meta name="theme-color" content="#0A0A0F">
 <title>PULSE — ChoirHub IT Assistant</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0A0A0F;
@@ -36,7 +34,7 @@
     height: 100%;
     background: var(--bg);
     color: var(--text);
-    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
     overflow: hidden;
   }
 
@@ -279,7 +277,7 @@
   }
   .report-row:last-child { border-bottom: none; }
   .report-key { color: var(--text2); }
-  .report-val { font-weight: 500; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .report-val { font-weight: 500; color: var(--text); font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 12px; }
 
   .action-card {
     background: rgba(239,68,68,0.06);
@@ -314,7 +312,7 @@
     border-radius: 8px;
     padding: 10px 12px;
     margin-top: 6px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
     font-size: 12px;
     color: var(--pulse2);
     line-height: 1.6;
@@ -484,7 +482,7 @@
     padding: 8px 10px;
     font-size: 12px;
     color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
     outline: none;
     letter-spacing: 0.02em;
   }
@@ -743,7 +741,15 @@ You are not a generic assistant. You are PULSE: a senior IT operations engineer,
 - Use structured reports for complex requests (health checks, audits, reports)
 - Always offer the next logical action after completing a task
 - Flag urgent issues clearly
-- When asked to make changes, describe exactly what you'd do and ask for confirmation first`;
+- When asked to make changes, describe exactly what you'd do and ask for confirmation first
+
+## Response Style — CRITICAL
+- Be EXTREMELY concise. Maximum 3-4 sentences for simple questions.
+- No preamble, no 'Great question', no repetition of the question.
+- Use short bullet lists only when listing multiple items.
+- One-line answers are perfect when possible.
+- For reports: compact tables or short bullets, never paragraphs.
+- Only give detail when explicitly asked to 'explain' or 'give details'.`;
 
 // ── INIT ──
 window.onload = function() {
@@ -818,7 +824,7 @@ async function sendMessage() {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 1024,
+        max_tokens: 512,
         system: SYSTEM,
         messages: messages
       })
@@ -878,7 +884,7 @@ function formatText(text) {
   // Bold
   text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   // Code inline
-  text = text.replace(/`([^`]+)`/g, '<code style="font-family:JetBrains Mono,monospace;font-size:12px;background:rgba(99,102,241,0.15);padding:1px 5px;border-radius:4px;color:#A5B4FC;">$1</code>');
+  text = text.replace(/`([^`]+)`/g, '<code style="font-family:ui-monospace,SF Mono,Menlo,monospace;font-size:12px;background:rgba(99,102,241,0.15);padding:1px 5px;border-radius:4px;color:#A5B4FC;">$1</code>');
   // Line breaks
   text = text.replace(/\n/g, '<br>');
   // Lists
